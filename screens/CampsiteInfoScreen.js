@@ -12,6 +12,7 @@ import { Rating, Input } from "react-native-elements";
 import { useSelector, useDispatch } from "react-redux";
 import RenderCampsite from "../features/campsites/RenderCampsite";
 import { toggleFavorite } from "../features/favorites/favoriteSlice";
+import { postComment } from "../features/comments/commentsSlice";
 
 const CampsiteInfoScreen = ({ route }) => {
     const { campsite } = route.params;
@@ -30,7 +31,7 @@ const CampsiteInfoScreen = ({ route }) => {
             text,
             campsiteId: campsite.id,
         };
-        console.log(newComment);
+        dispatch(postComment(newComment));
         setShowModal(!showModal);
     };
 
@@ -45,11 +46,11 @@ const CampsiteInfoScreen = ({ route }) => {
             <View style={styles.commentItem}>
                 <Text style={{ fontSize: 14 }}>{item.text}</Text>
                 <Rating
-                readonly
-                startingValue={item.rating}
-                imageSize={10}
-                style={{ alignItems: 'flex-start', paddingVertical: '5%' }}
-            />
+                    readonly
+                    startingValue={item.rating}
+                    imageSize={10}
+                    style={{ alignItems: "flex-start", paddingVertical: "5%" }}
+                />
                 <Text style={{ fontSize: 12 }}>
                     {`-- ${item.author}, ${item.date}`}
                 </Text>
