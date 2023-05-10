@@ -11,7 +11,7 @@ import {
 import { Rating, Input } from "react-native-elements";
 import { useSelector, useDispatch } from "react-redux";
 import RenderCampsite from "../features/campsites/RenderCampsite";
-import { toggleFavorite } from "../features/favorites/favoriteSlice";
+import { toggleFavorite } from "../features/favorites/favoritesSlice";
 import { postComment } from "../features/comments/commentsSlice";
 
 const CampsiteInfoScreen = ({ route }) => {
