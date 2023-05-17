@@ -1,33 +1,34 @@
-import { Image, Platform, StyleSheet, Text, View } from "react-native";
-import Constants from "expo-constants";
-import CampsiteInfoScreen from "./CampsiteInfoScreen";
-import DirectoryScreen from "./DirectoryScreen";
-import { createStackNavigator } from "@react-navigation/stack";
+import { Image, Platform, StyleSheet, Text, View } from 'react-native';
+import Constants from 'expo-constants';
+import CampsiteInfoScreen from './CampsiteInfoScreen';
+import DirectoryScreen from './DirectoryScreen';
+import { createStackNavigator } from '@react-navigation/stack';
 import {
     createDrawerNavigator,
     DrawerContentScrollView,
     DrawerItemList,
-} from "@react-navigation/drawer";
-import HomeScreen from "./HomeScreen";
-import AboutScreen from "./AboutScreen";
-import ContactScreen from "./ContactScreen";
-import ReservationScreen from "./ReservationScreen";
-import { Icon } from "react-native-elements";
-import logo from "../assets/images/logo.png";
-import { useDispatch } from "react-redux";
-import { useEffect } from "react";
-import { fetchPartners } from "../features/partners/partnersSlice";
-import { fetchCampsites } from "../features/campsites/campsitesSlice";
-import { fetchPromotions } from "../features/promotions/promotionsSlice";
-import { fetchComments } from "../features/comments/commentsSlice";
-import FavoritesScreen from "./FavoritesScreen";
-import LoginScreen from "./LoginScreen";
+} from '@react-navigation/drawer';
+import HomeScreen from './HomeScreen';
+import AboutScreen from './AboutScreen';
+import ContactScreen from './ContactScreen';
+import ReservationScreen from './ReservationScreen';
+import { Icon } from 'react-native-elements';
+import logo from '../assets/images/logo.png';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { fetchPartners } from '../features/partners/partnersSlice';
+import { fetchCampsites } from '../features/campsites/campsitesSlice';
+import { fetchPromotions } from '../features/promotions/promotionsSlice';
+import { fetchComments } from '../features/comments/commentsSlice';
+import FavoritesScreen from './FavoritesScreen';
+import LoginScreen from './LoginScreen';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/core';
 
 const Drawer = createDrawerNavigator();
 
 const screenOptions = {
-    headerTintColor: "#fff",
-    headerStyle: { backgroundColor: "#5637DD" },
+    headerTintColor: '#fff',
+    headerStyle: { backgroundColor: '#5637DD' },
 };
 
 const HomeNavigator = () => {
@@ -35,14 +36,14 @@ const HomeNavigator = () => {
     return (
         <Stack.Navigator screenOptions={screenOptions}>
             <Stack.Screen
-                name="Home"
+                name='Home'
                 component={HomeScreen}
                 options={({ navigation }) => ({
-                    title: "Home",
+                    title: 'Home',
                     headerLeft: () => (
                         <Icon
-                            name="home"
-                            type="font-awesome"
+                            name='home'
+                            type='font-awesome'
                             iconStyle={styles.stackIcon}
                             onPress={() => navigation.toggleDrawer()}
                         />
@@ -58,13 +59,13 @@ const AboutNavigator = () => {
     return (
         <Stack.Navigator screenOptions={screenOptions}>
             <Stack.Screen
-                name="About"
+                name='About'
                 component={AboutScreen}
                 options={({ navigation }) => ({
                     headerLeft: () => (
                         <Icon
-                            name="info-circle"
-                            type="font-awesome"
+                            name='info-circle'
+                            type='font-awesome'
                             iconStyle={styles.stackIcon}
                             onPress={() => navigation.toggleDrawer()}
                         />
@@ -80,14 +81,14 @@ const ContactNavigator = () => {
     return (
         <Stack.Navigator screenOptions={screenOptions}>
             <Stack.Screen
-                name="Contact"
+                name='Contact'
                 component={ContactScreen}
                 options={({ navigation }) => ({
-                    title: "Contact Us",
+                    title: 'Contact Us',
                     headerLeft: () => (
                         <Icon
-                            name="address-card"
-                            type="font-awesome"
+                            name='address-card'
+                            type='font-awesome'
                             iconStyle={styles.stackIcon}
                             onPress={() => navigation.toggleDrawer()}
                         />
@@ -103,14 +104,14 @@ const ReservationNavigator = () => {
     return (
         <Stack.Navigator screenOptions={screenOptions}>
             <Stack.Screen
-                name="Reservation"
+                name='Reservation'
                 component={ReservationScreen}
                 options={({ navigation }) => ({
-                    title: "Reservation Search",
+                    title: 'Reservation Search',
                     headerLeft: () => (
                         <Icon
-                            name="tree"
-                            type="font-awesome"
+                            name='tree'
+                            type='font-awesome'
                             iconStyle={styles.stackIcon}
                             onPress={() => navigation.toggleDrawer()}
                         />
@@ -126,14 +127,14 @@ const FavoritesNavigator = () => {
     return (
         <Stack.Navigator screenOptions={screenOptions}>
             <Stack.Screen
-                name="Favorites"
+                name='Favorites'
                 component={FavoritesScreen}
                 options={({ navigation }) => ({
-                    title: "Favorite Campsites",
+                    title: 'Favorite Campsites',
                     headerLeft: () => (
                         <Icon
-                            name="heart"
-                            type="font-awesome"
+                            name='heart'
+                            type='font-awesome'
                             iconStyle={styles.stackIcon}
                             onPress={() => navigation.toggleDrawer()}
                         />
@@ -149,13 +150,19 @@ const LoginNavigator = () => {
     return (
         <Stack.Navigator screenOptions={screenOptions}>
             <Stack.Screen
-                name="Login"
+                name='Login'
                 component={LoginScreen}
-                options={({ navigation }) => ({
+                options={({ navigation, route }) => ({
+                    headerTitle: getFocusedRouteNameFromRoute(route),
                     headerLeft: () => (
                         <Icon
-                            name="sign-in"
-                            type="font-awesome"
+                            name={
+                                getFocusedRouteNameFromRoute(route) ===
+                                'Register'
+                                    ? 'user-plus'
+                                    : 'sign-in'
+                            }
+                            type='font-awesome'
                             iconStyle={styles.stackIcon}
                             onPress={() => navigation.toggleDrawer()}
                         />
@@ -170,18 +177,18 @@ const DirectoryNavigator = () => {
     const Stack = createStackNavigator();
     return (
         <Stack.Navigator
-            initialRouteName="Directory"
+            initialRouteName='Directory'
             screenOptions={screenOptions}
         >
             <Stack.Screen
-                name="Directory"
+                name='Directory'
                 component={DirectoryScreen}
                 options={({ navigation }) => ({
-                    title: "Campsite Directory",
+                    title: 'Campsite Directory',
                     headerLeft: () => (
                         <Icon
-                            name="list"
-                            type="font-awesome"
+                            name='list'
+                            type='font-awesome'
                             iconStyle={styles.stackIcon}
                             onPress={() => navigation.toggleDrawer()}
                         />
@@ -189,7 +196,7 @@ const DirectoryNavigator = () => {
                 })}
             />
             <Stack.Screen
-                name="CampsiteInfo"
+                name='CampsiteInfo'
                 component={CampsiteInfoScreen}
                 options={({ route }) => ({
                     title: route.params.campsite.name,
@@ -209,7 +216,7 @@ const CustomDrawerContent = (props) => (
                 <Text style={styles.drawerHeaderText}>NuCamp</Text>
             </View>
         </View>
-        <DrawerItemList {...props} labelStyle={{ fontWeight: "bold" }} />
+        <DrawerItemList {...props} labelStyle={{ fontWeight: 'bold' }} />
     </DrawerContentScrollView>
 );
 
@@ -228,22 +235,22 @@ const Main = () => {
             style={{
                 flex: 1,
                 paddingTop:
-                    Platform.OS === "ios" ? 0 : Constants.statusBarHeight,
+                    Platform.OS === 'ios' ? 0 : Constants.statusBarHeight,
             }}
         >
             <Drawer.Navigator
-                initialRouteName="Home"
+                initialRouteName='Home'
                 drawerContent={CustomDrawerContent}
-                drawerStyle={{ backgroundColor: "#CEC8FF" }}
+                drawerStyle={{ backgroundColor: '#CEC8FF' }}
             >
                 <Drawer.Screen
-                    name="Login"
+                    name='Login'
                     component={LoginNavigator}
                     options={{
                         drawerIcon: ({ color }) => (
                             <Icon
-                                name="sign-in"
-                                type="font-awesome"
+                                name='sign-in'
+                                type='font-awesome'
                                 size={24}
                                 iconStyle={{ width: 24 }}
                                 color={color}
@@ -252,14 +259,14 @@ const Main = () => {
                     }}
                 />
                 <Drawer.Screen
-                    name="Home"
+                    name='Home'
                     component={HomeNavigator}
                     options={{
-                        title: "Home",
+                        title: 'Home',
                         drawerIcon: ({ color }) => (
                             <Icon
-                                name="home"
-                                type="font-awesome"
+                                name='home'
+                                type='font-awesome'
                                 size={24}
                                 iconStyle={{ width: 24 }}
                                 color={color}
@@ -268,14 +275,14 @@ const Main = () => {
                     }}
                 />
                 <Drawer.Screen
-                    name="Directory"
+                    name='Directory'
                     component={DirectoryNavigator}
                     options={{
-                        title: "Campsite Directory",
+                        title: 'Campsite Directory',
                         drawerIcon: ({ color }) => (
                             <Icon
-                                name="list"
-                                type="font-awesome"
+                                name='list'
+                                type='font-awesome'
                                 size={24}
                                 iconStyle={{ width: 24 }}
                                 color={color}
@@ -284,14 +291,14 @@ const Main = () => {
                     }}
                 />
                 <Drawer.Screen
-                    name="ReserveCampsite"
+                    name='ReserveCampsite'
                     component={ReservationNavigator}
                     options={{
-                        title: "Reserve Campsite",
+                        title: 'Reserve Campsite',
                         drawerIcon: ({ color }) => (
                             <Icon
-                                name="tree"
-                                type="font-awesome"
+                                name='tree'
+                                type='font-awesome'
                                 size={24}
                                 iconStyle={{ width: 24 }}
                                 color={color}
@@ -300,14 +307,14 @@ const Main = () => {
                     }}
                 />
                 <Drawer.Screen
-                    name="Favorites"
+                    name='Favorites'
                     component={FavoritesNavigator}
                     options={{
-                        title: "My Favorites",
+                        title: 'My Favorites',
                         drawerIcon: ({ color }) => (
                             <Icon
-                                name="heart"
-                                type="font-awesome"
+                                name='heart'
+                                type='font-awesome'
                                 size={24}
                                 iconStyle={{ width: 24 }}
                                 color={color}
@@ -316,14 +323,14 @@ const Main = () => {
                     }}
                 />
                 <Drawer.Screen
-                    name="About"
+                    name='About'
                     component={AboutNavigator}
                     options={{
-                        title: "About",
+                        title: 'About',
                         drawerIcon: ({ color }) => (
                             <Icon
-                                name="info-circle"
-                                type="font-awesome"
+                                name='info-circle'
+                                type='font-awesome'
                                 size={24}
                                 iconStyle={{ width: 24 }}
                                 color={color}
@@ -332,14 +339,14 @@ const Main = () => {
                     }}
                 />
                 <Drawer.Screen
-                    name="Contact"
+                    name='Contact'
                     component={ContactNavigator}
                     options={{
-                        title: "Contact Us",
+                        title: 'Contact Us',
                         drawerIcon: ({ color }) => (
                             <Icon
-                                name="address-card"
-                                type="font-awesome"
+                                name='address-card'
+                                type='font-awesome'
                                 size={24}
                                 iconStyle={{ width: 24 }}
                                 color={color}
@@ -354,17 +361,17 @@ const Main = () => {
 
 const styles = StyleSheet.create({
     drawerHeader: {
-        backgroundColor: "#5637DD",
+        backgroundColor: '#5637DD',
         height: 140,
-        alignItems: "center",
-        justifyContent: "center",
+        alignItems: 'center',
+        justifyContent: 'center',
         flex: 1,
-        flexDirection: "row",
+        flexDirection: 'row',
     },
     drawerHeaderText: {
-        color: "#fff",
+        color: '#fff',
         fontSize: 24,
-        fontWeight: "bold",
+        fontWeight: 'bold',
     },
     drawerImage: {
         margin: 10,
@@ -373,7 +380,7 @@ const styles = StyleSheet.create({
     },
     stackIcon: {
         marginLeft: 10,
-        color: "#fff",
+        color: '#fff',
         fontSize: 24,
     },
 });
