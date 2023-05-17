@@ -33,7 +33,7 @@ const ReservationScreen = () => {
             "Begin Search?",
             `Number of Campers: ${campers}
                 \nHike-In? ${hikeIn}
-                \nDate: ${date}`,
+                \nDate: ${date.toLocaleDateString('en-US')}`,
             [
                 {
                     text: "Cancel",
