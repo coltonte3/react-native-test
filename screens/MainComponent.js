@@ -1,4 +1,12 @@
-import { Image, Platform, StyleSheet, Text, View } from 'react-native';
+import {
+    Image,
+    Platform,
+    StyleSheet,
+    Text,
+    View,
+    Alert,
+    ToastAndroid
+} from 'react-native';
 import Constants from 'expo-constants';
 import CampsiteInfoScreen from './CampsiteInfoScreen';
 import DirectoryScreen from './DirectoryScreen';
@@ -6,7 +14,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import {
     createDrawerNavigator,
     DrawerContentScrollView,
-    DrawerItemList,
+    DrawerItemList
 } from '@react-navigation/drawer';
 import HomeScreen from './HomeScreen';
 import AboutScreen from './AboutScreen';
@@ -23,12 +31,13 @@ import { fetchComments } from '../features/comments/commentsSlice';
 import FavoritesScreen from './FavoritesScreen';
 import LoginScreen from './LoginScreen';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/core';
+import NetInfo from '@react-native-community/netinfo';
 
 const Drawer = createDrawerNavigator();
 
 const screenOptions = {
     headerTintColor: '#fff',
-    headerStyle: { backgroundColor: '#5637DD' },
+    headerStyle: { backgroundColor: '#5637DD' }
 };
 
 const HomeNavigator = () => {
@@ -47,7 +56,7 @@ const HomeNavigator = () => {
                             iconStyle={styles.stackIcon}
                             onPress={() => navigation.toggleDrawer()}
                         />
-                    ),
+                    )
                 })}
             />
         </Stack.Navigator>
@@ -69,7 +78,7 @@ const AboutNavigator = () => {
                             iconStyle={styles.stackIcon}
                             onPress={() => navigation.toggleDrawer()}
                         />
-                    ),
+                    )
                 })}
             />
         </Stack.Navigator>
@@ -92,7 +101,7 @@ const ContactNavigator = () => {
                             iconStyle={styles.stackIcon}
                             onPress={() => navigation.toggleDrawer()}
                         />
-                    ),
+                    )
                 })}
             />
         </Stack.Navigator>
@@ -115,7 +124,7 @@ const ReservationNavigator = () => {
                             iconStyle={styles.stackIcon}
                             onPress={() => navigation.toggleDrawer()}
                         />
-                    ),
+                    )
                 })}
             />
         </Stack.Navigator>
@@ -138,7 +147,7 @@ const FavoritesNavigator = () => {
                             iconStyle={styles.stackIcon}
                             onPress={() => navigation.toggleDrawer()}
                         />
-                    ),
+                    )
                 })}
             />
         </Stack.Navigator>
@@ -166,7 +175,7 @@ const LoginNavigator = () => {
                             iconStyle={styles.stackIcon}
                             onPress={() => navigation.toggleDrawer()}
                         />
-                    ),
+                    )
                 })}
             />
         </Stack.Navigator>
@@ -192,14 +201,14 @@ const DirectoryNavigator = () => {
                             iconStyle={styles.stackIcon}
                             onPress={() => navigation.toggleDrawer()}
                         />
-                    ),
+                    )
                 })}
             />
             <Stack.Screen
                 name='CampsiteInfo'
                 component={CampsiteInfoScreen}
                 options={({ route }) => ({
-                    title: route.params.campsite.name,
+                    title: route.params.campsite.name
                 })}
             />
         </Stack.Navigator>
@@ -230,12 +239,56 @@ const Main = () => {
         dispatch(fetchComments());
     }, [dispatch]);
 
+    useEffect(() => {
+        NetInfo.fetch().then((connectionInfo) => {
+            Platform.OS === 'ios'
+                ? Alert.alert(
+                    'Initial Network Connectivity Type:',
+                    connectionInfo.type
+                )
+                : ToastAndroid.show(
+                    'Initial Network Connectivity Type: ' +
+                        connectionInfo.type,
+                    ToastAndroid.LONG
+                );
+        });
+
+        const unsubscribeNetInfo = NetInfo.addEventListener(
+            (connectionInfo) => {
+                handleConnectivityChange(connectionInfo);
+            }
+        );
+
+        return unsubscribeNetInfo;
+    }, []);
+
+    const handleConnectivityChange = (connectionInfo) => {
+        let connectionMsg = 'You are now connected to an active network.';
+        switch (connectionInfo.type) {
+            case 'none':
+                connectionMsg = 'No network connection is active.';
+                break;
+            case 'unknown':
+                connectionMsg = 'The network connection state is now unknown.';
+                break;
+            case 'cellular':
+                connectionMsg = 'You are now connected to a cellular network.';
+                break;
+            case 'wifi':
+                connectionMsg = 'You are now connected to a WiFi network.';
+                break;
+        }
+        Platform.OS === 'ios'
+            ? Alert.alert('Connection change:', connectionMsg)
+            : ToastAndroid.show(connectionMsg, ToastAndroid.LONG);
+    };
+
     return (
         <View
             style={{
                 flex: 1,
                 paddingTop:
-                    Platform.OS === 'ios' ? 0 : Constants.statusBarHeight,
+                    Platform.OS === 'ios' ? 0 : Constants.statusBarHeight
             }}
         >
             <Drawer.Navigator
@@ -255,7 +308,7 @@ const Main = () => {
                                 iconStyle={{ width: 24 }}
                                 color={color}
                             />
-                        ),
+                        )
                     }}
                 />
                 <Drawer.Screen
@@ -271,7 +324,7 @@ const Main = () => {
                                 iconStyle={{ width: 24 }}
                                 color={color}
                             />
-                        ),
+                        )
                     }}
                 />
                 <Drawer.Screen
@@ -287,7 +340,7 @@ const Main = () => {
                                 iconStyle={{ width: 24 }}
                                 color={color}
                             />
-                        ),
+                        )
                     }}
                 />
                 <Drawer.Screen
@@ -303,7 +356,7 @@ const Main = () => {
                                 iconStyle={{ width: 24 }}
                                 color={color}
                             />
-                        ),
+                        )
                     }}
                 />
                 <Drawer.Screen
@@ -319,7 +372,7 @@ const Main = () => {
                                 iconStyle={{ width: 24 }}
                                 color={color}
                             />
-                        ),
+                        )
                     }}
                 />
                 <Drawer.Screen
@@ -335,7 +388,7 @@ const Main = () => {
                                 iconStyle={{ width: 24 }}
                                 color={color}
                             />
-                        ),
+                        )
                     }}
                 />
                 <Drawer.Screen
@@ -351,7 +404,7 @@ const Main = () => {
                                 iconStyle={{ width: 24 }}
                                 color={color}
                             />
-                        ),
+                        )
                     }}
                 />
             </Drawer.Navigator>
@@ -366,23 +419,23 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         flex: 1,
-        flexDirection: 'row',
+        flexDirection: 'row'
     },
     drawerHeaderText: {
         color: '#fff',
         fontSize: 24,
-        fontWeight: 'bold',
+        fontWeight: 'bold'
     },
     drawerImage: {
         margin: 10,
         height: 60,
-        width: 60,
+        width: 60
     },
     stackIcon: {
         marginLeft: 10,
         color: '#fff',
-        fontSize: 24,
-    },
+        fontSize: 24
+    }
 });
 
 export default Main;
