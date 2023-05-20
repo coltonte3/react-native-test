@@ -4,6 +4,7 @@ import { CheckBox, Input, Button, Icon } from 'react-native-elements';
 import * as SecureStore from 'expo-secure-store';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import * as ImagePicker from 'expo-image-picker';
+import * as ImageManipulator from 'expo-image-manipulator';
 import { baseUrl } from '../shared/baseUrl';
 import logo from '../assets/images/logo.png';
 
@@ -21,7 +22,7 @@ const LoginTab = ({ navigation }) => {
                 'userinfo',
                 JSON.stringify({
                     username,
-                    password
+                    password,
                 })
             ).catch((error) => console.log('Could not save user info', error));
         } else {
@@ -119,7 +120,7 @@ const RegisterTab = () => {
             firstName,
             lastName,
             email,
-            remember
+            remember,
         };
         console.log(JSON.stringify(userInfo));
         if (remember) {
@@ -127,7 +128,7 @@ const RegisterTab = () => {
                 'userinfo',
                 JSON.stringify({
                     username,
-                    password
+                    password,
                 })
             ).catch((error) => console.log('Could not save user info', error));
         } else {
@@ -144,11 +145,42 @@ const RegisterTab = () => {
         if (cameraPermission.status === 'granted') {
             const capturedImage = await ImagePicker.launchCameraAsync({
                 allowsEditing: true,
-                aspect: [1, 1]
+                aspect: [1, 1],
             });
             if (capturedImage.assets) {
                 console.log(capturedImage.assets[0]);
-                setImageUrl(capturedImage.assets[0].uri);
+                processImage(capturedImage.assets[0].uri);
+            }
+        }
+    };
+
+    const processImage = async (imgUri) => {
+        try {
+            const processedImage = await ImageManipulator.manipulateAsync(
+                imgUri,
+                [{ resize: { width: 400 } }],
+                { format: 'png' }
+            );
+            console.log(processedImage);
+            setImageUrl(processedImage.uri);
+        } catch (error) {
+            console.log('Error processing image', error);
+        }
+    };
+
+    const getImageFromGallery = async () => {
+        const mediaLibraryPermissions =
+            await ImagePicker.requestCameraPermissionsAsync();
+
+        if (mediaLibraryPermissions.status === 'granted') {
+            const capturedImage = await ImagePicker.launchImageLibraryAsync({
+                allowsEditing: true,
+                aspect: [1, 1],
+            });
+
+            if (capturedImage.assets) {
+                console.log(capturedImage.assets[0]);
+                processImage(capturedImage.assets[0].uri);
             }
         }
     };
@@ -163,6 +195,7 @@ const RegisterTab = () => {
                         style={styles.image}
                     />
                     <Button title='Camera' onPress={getImageFromCamera} />
+                    <Button title='Gallery' onPress={getImageFromGallery} />
                 </View>
                 <Input
                     placeholder='Username'
@@ -240,7 +273,7 @@ const LoginScreen = () => {
         inactiveBackgroundColor: '#CEC8FF',
         activeTintColor: '#fff',
         inactiveTintColor: '#808080',
-        labelStyle: { fontSize: 16 }
+        labelStyle: { fontSize: 16 },
     };
 
     return (
@@ -257,7 +290,7 @@ const LoginScreen = () => {
                                 color={props.color}
                             />
                         );
-                    }
+                    },
                 }}
             />
             <Tab.Screen
@@ -272,7 +305,7 @@ const LoginScreen = () => {
                                 color={props.color}
                             />
                         );
-                    }
+                    },
                 }}
             />
         </Tab.Navigator>
@@ -282,35 +315,35 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
     container: {
         justifyContent: 'center',
-        margin: 10
+        margin: 10,
     },
     formIcon: {
-        marginRight: 10
+        marginRight: 10,
     },
     formInput: {
         padding: 8,
-        height: 60
+        height: 60,
     },
     formCheckbox: {
         margin: 8,
-        backgroundColor: null
+        backgroundColor: null,
     },
     formButton: {
         margin: 20,
         marginRight: 40,
-        marginLeft: 40
+        marginLeft: 40,
     },
     imageContainer: {
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-evenly',
-        margin: 10
+        margin: 10,
     },
     image: {
         width: 60,
-        height: 60
-    }
+        height: 60,
+    },
 });
 
 export default LoginScreen;
